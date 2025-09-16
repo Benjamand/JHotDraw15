@@ -23,7 +23,10 @@ jobs:
     permissions:
       contents: read
       packages: write
-
+      
+    env:
+      GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
+      
     steps:
     - uses: actions/checkout@v4
     - name: Set up JDK 21
