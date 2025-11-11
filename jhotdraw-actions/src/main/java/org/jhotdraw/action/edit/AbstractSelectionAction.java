@@ -43,6 +43,8 @@ import org.jhotdraw.beans.WeakPropertyChangeListener;
  * @version $Id$
  */
 public abstract class AbstractSelectionAction extends AbstractAction {
+    private static final String ENABLED_PROPERTY = "enabled";
+
 
     private static final long serialVersionUID = 1L;
     /**
@@ -53,7 +55,7 @@ public abstract class AbstractSelectionAction extends AbstractAction {
     /**
      * This variable keeps a strong reference on the property change listener.
      */
-    private PropertyChangeListener propertyHandler;
+    private transient PropertyChangeListener propertyHandler;
 
     /**
      * Creates a new instance which acts on the specified component.
@@ -61,23 +63,16 @@ public abstract class AbstractSelectionAction extends AbstractAction {
      * @param target The target of the action. Specify null for the currently
      * focused component.
      */
-    public AbstractSelectionAction(JComponent target) {
+    protected AbstractSelectionAction(JComponent target) {
         this.target = target;
-        if (target != null) {
-            // Register with a weak reference on the JComponent.
-            propertyHandler = new PropertyChangeListener() {
-                @Override
-                public void propertyChange(PropertyChangeEvent evt) {
-                    String n = evt.getPropertyName();
-                    if ("enabled".equals(n)) {
-                        updateEnabled();
-                    } else if (n.equals(EditableComponent.SELECTION_EMPTY_PROPERTY)) {
-                        updateEnabled();
-                    }
-                }
-            };
-            target.addPropertyChangeListener(new WeakPropertyChangeListener(propertyHandler));
-        }
+        if (target == null)  return;
+        propertyHandler = evt -> {
+            String propertyName = evt.getPropertyName();
+            if (propertyName.equals(ENABLED_PROPERTY) || propertyName.equals(EditableComponent.SELECTION_EMPTY_PROPERTY)) {
+                updateEnabled();
+            }
+        };
+        target.addPropertyChangeListener(new WeakPropertyChangeListener(propertyHandler));
     }
 
     protected void updateEnabled() {
