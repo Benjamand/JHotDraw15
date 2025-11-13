@@ -23,6 +23,7 @@ jobs:
     permissions:
       contents: read
       packages: write
+      statuses: write
       
     env:
       GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
