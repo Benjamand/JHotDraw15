@@ -128,7 +128,9 @@ public class JFontChooser extends JComponent {
             public void propertyChange(PropertyChangeEvent evt) {
                 if ("ancestor".equals(evt.getPropertyName()) && evt.getNewValue() != null) {
                     try {
-                        ((DefaultFontChooserModel) model).setFonts(getAllFonts());
+                         Font[] fonts = getAllFonts();
+                        ((DefaultFontChooserModel) model).setFonts(fonts);
+                         
                     } catch (Exception ex) {
                         ex.printStackTrace();
                     }
@@ -255,7 +257,9 @@ public class JFontChooser extends JComponent {
         Object[] listeners = listenerList.getListenerList();
         long mostRecentEventTime = EventQueue.getMostRecentEventTime();
         int modifiers = 0;
+
         AWTEvent currentEvent = EventQueue.getCurrentEvent();
+
         if (currentEvent instanceof InputEvent) {
             modifiers = ((InputEvent) currentEvent).getModifiers();
         } else if (currentEvent instanceof ActionEvent) {
@@ -328,8 +332,10 @@ public class JFontChooser extends JComponent {
                             //System.out.println("JFontChooser ***bogus*** "+decoded.getFontName());
                         }
                     }
+                    // set a default font so a font is always chosen.
                     return goodFonts.toArray(new Font[goodFonts.size()]);
                     // return fonts;
+
                 }
             });
             new Thread(future).start();
@@ -351,6 +357,7 @@ public class JFontChooser extends JComponent {
         } catch (InterruptedException | ExecutionException ex) {
             return new Font[0];
         }
+
     }
 
     /**
@@ -377,9 +384,14 @@ public class JFontChooser extends JComponent {
      */
     public void setSelectedFont(Font newValue) {
         Font oldValue = selectedFont;
-        this.selectedFont = newValue;
-        firePropertyChange(SELECTED_FONT_PROPERTY, oldValue, newValue);
-        updateSelectionPath(newValue);
+        Font decoded = Font.decode(newValue.getFontName());
+           if (decoded.getFontName().equals(newValue.getFontName()) || decoded.getFontName().endsWith("-Derived")) {
+               this.selectedFont = newValue;
+               firePropertyChange(SELECTED_FONT_PROPERTY, oldValue, newValue);
+               updateSelectionPath(newValue);
+           } else {
+               return;
+           }
     }
 
     /**
