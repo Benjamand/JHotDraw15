@@ -3,42 +3,66 @@ import org.jhotdraw.action.edit.CutAction;
 import org.jhotdraw.datatransfer.ClipboardUtil;
 import org.junit.Before;
 import org.junit.Test;
+import org.mockito.Mockito;
 
+import javax.sound.sampled.Clip;
 import javax.swing.*;
 
+import java.awt.datatransfer.Clipboard;
 import java.awt.datatransfer.DataFlavor;
 
 import static org.junit.Assert.*;
+import static org.mockito.ArgumentMatchers.eq;
+import static org.mockito.Mockito.verify;
 
 public class CutActionTest {
     JTextArea component;
     CutAction cutAction;
+    Clipboard mockClipboard;
+    TransferHandler mockTransferHandler;
+
+
     @Before
     public void setUp() {
         component = new JTextArea("This is a test.");
         cutAction = new CutAction(component);
+        mockClipboard = Mockito.mock(Clipboard.class);
+        ClipboardUtil.setClipboard(mockClipboard);
+        mockTransferHandler = Mockito.mock(TransferHandler.class);
+        component.setTransferHandler(mockTransferHandler);
+
         assertNotNull(cutAction);
     }
     @Test
     public void testActionPerformed() {
         component.selectAll();
         cutAction.actionPerformed(null);
-        assertEquals("", component.getText());
+        verify(component.getTransferHandler()).exportToClipboard(
+                eq(component),
+                eq(mockClipboard),
+                eq(TransferHandler.MOVE)
+        );
     }
     @Test
     public void TestActionSavesToClipboard() throws Exception {
         component.selectAll();
         cutAction.actionPerformed(null);
-        String result = ClipboardUtil.getClipboard().getData(DataFlavor.stringFlavor).toString();
-        assertEquals("This is a test.", result);
+        verify(component.getTransferHandler()).exportToClipboard(
+                eq(component),
+                eq(mockClipboard),
+                eq(TransferHandler.MOVE)
+        );
     }
     @Test
     public void testCutActionTextAreaBoundaryOneChar() throws Exception {
         component.setText("A");
         component.selectAll();
         cutAction.actionPerformed(null);
-        String result = ClipboardUtil.getClipboard().getData(DataFlavor.stringFlavor).toString();
-        assertEquals("A", result);
+        verify(component.getTransferHandler()).exportToClipboard(
+                eq(component),
+                eq(mockClipboard),
+                eq(TransferHandler.MOVE)
+        );
     }
     @Test
     public void testCutActionAreaBoundaryManyChars() throws Exception {
@@ -61,8 +85,11 @@ public class CutActionTest {
             }
         }
 
-        String result = ClipboardUtil.getClipboard().getData(DataFlavor.stringFlavor).toString();
-        assertEquals(str, result);
+        verify(component.getTransferHandler()).exportToClipboard(
+                eq(component),
+                eq(mockClipboard),
+                eq(TransferHandler.MOVE)
+        );
     }
     @Test
     public void testCutActionAreaBoundaryUniqueSymbols() throws Exception { // Fejler også noglegange her, java.lang.IllegalStateException: cannot open system clipboard
@@ -79,7 +106,10 @@ public class CutActionTest {
                 }
             }
         }
-        String result = ClipboardUtil.getClipboard().getData(DataFlavor.stringFlavor).toString();
-        assertEquals("½█ÖÇœÆ", result);
+        verify(component.getTransferHandler()).exportToClipboard(
+                eq(component),
+                eq(mockClipboard),
+                eq(TransferHandler.MOVE)
+        );
     }
 }
