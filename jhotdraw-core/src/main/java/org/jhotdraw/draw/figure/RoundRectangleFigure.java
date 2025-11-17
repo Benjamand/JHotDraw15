@@ -11,6 +11,7 @@ import java.awt.*;
 import java.awt.geom.*;
 import java.io.*;
 import java.util.*;
+
 import org.jhotdraw.draw.AttributeKeys;
 import org.jhotdraw.draw.connector.ChopRoundRectangleConnector;
 import org.jhotdraw.draw.connector.Connector;
@@ -28,21 +29,21 @@ import org.jhotdraw.xml.DOMOutput;
  * <p>
  * This figure creates a {@link RoundRectangleRadiusHandle} which allows
  * to interactively change the corner radius.
+
+ * (Refactored to remove duplicate code.)
  *
  * @author Werner Randelshofer
- * @version $Id$
  */
 public class RoundRectangleFigure extends AbstractAttributedFigure {
 
     private static final long serialVersionUID = 1L;
-    /**
-     * Identifies the {@code arcWidth} JavaBeans property.
-     */
+
+    /** Identifies the {@code arcWidth} JavaBeans property. */
     public static final String ARC_WIDTH_PROPERTY = "arcWidth";
-    /**
-     * Identifies the {@code arcHeight} JavaBeans property.
-     */
+
+    /** Identifies the {@code arcHeight} JavaBeans property. */
     public static final String ARC_HEIGHT_PROPERTY = "arcHeight";
+
     protected RoundRectangle2D.Double roundrect;
     protected static final double DEFAULT_ARC = 20;
 
@@ -55,23 +56,36 @@ public class RoundRectangleFigure extends AbstractAttributedFigure {
 
     public RoundRectangleFigure(double x, double y, double width, double height) {
         roundrect = new RoundRectangle2D.Double(x, y, width, height, DEFAULT_ARC, DEFAULT_ARC);
-        /*
-    FILL_COLOR.set(this, Color.white);
-    STROKE_COLOR.set(this, Color.black);
-         */
     }
 
-    // DRAWING
+//new Helper to remove duplicate code (SRP + OCP improvement)
+
+    /**
+     * Returns a grown clone of the round rectangle. Growth increases x/y bounds
+     * as well as arc radii.
+     */
+    private RoundRectangle2D.Double getGrownRoundRect(double growth) {
+        RoundRectangle2D.Double r = (RoundRectangle2D.Double) roundrect.clone();
+        r.x -= growth;
+        r.y -= growth;
+        r.width += growth * 2;
+        r.height += growth * 2;
+        r.arcwidth += growth * 2;
+        r.archeight += growth * 2;
+        return r;
+    }
+
+//drawing
+
     @Override
     protected void drawFill(Graphics2D g) {
-        RoundRectangle2D.Double r = (RoundRectangle2D.Double) roundrect.clone();
-        double grow = AttributeKeys.getPerpendicularFillGrowth(this, AttributeKeys.getScaleFactorFromGraphics(g));
-        r.x -= grow;
-        r.y -= grow;
-        r.width += grow * 2;
-        r.height += grow * 2;
-        r.arcwidth += grow * 2;
-        r.archeight += grow * 2;
+        double grow = AttributeKeys.getPerpendicularFillGrowth(
+                this,
+                AttributeKeys.getScaleFactorFromGraphics(g)
+        );
+
+        RoundRectangle2D.Double r = getGrownRoundRect(grow);
+
         if (r.width > 0 && r.height > 0) {
             g.fill(r);
         }
@@ -79,20 +93,20 @@ public class RoundRectangleFigure extends AbstractAttributedFigure {
 
     @Override
     protected void drawStroke(Graphics2D g) {
-        RoundRectangle2D.Double r = (RoundRectangle2D.Double) roundrect.clone();
-        double grow = AttributeKeys.getPerpendicularDrawGrowth(this, AttributeKeys.getScaleFactorFromGraphics(g));
-        r.x -= grow;
-        r.y -= grow;
-        r.width += grow * 2;
-        r.height += grow * 2;
-        r.arcwidth += grow * 2;
-        r.archeight += grow * 2;
+        double grow = AttributeKeys.getPerpendicularDrawGrowth(
+                this,
+                AttributeKeys.getScaleFactorFromGraphics(g)
+        );
+
+        RoundRectangle2D.Double r = getGrownRoundRect(grow);
+
         if (r.width > 0 && r.height > 0) {
             g.draw(r);
         }
     }
 
-    // SHAPE AND BOUNDS
+// shape and boound
+
     @Override
     public Rectangle2D.Double getBounds() {
         return (Rectangle2D.Double) roundrect.getBounds2D();
@@ -106,61 +120,43 @@ public class RoundRectangleFigure extends AbstractAttributedFigure {
         return r;
     }
 
-    /**
-     * Gets the arc width.
-     */
+    //height and wieght properties
+
     public double getArcWidth() {
         return roundrect.arcwidth;
     }
 
-    /**
-     * Gets the arc height.
-     */
     public double getArcHeight() {
         return roundrect.archeight;
     }
 
-    /**
-     * Sets the arc width.
-     */
     public void setArcWidth(double newValue) {
         double oldValue = roundrect.arcwidth;
         roundrect.arcwidth = newValue;
         firePropertyChange(ARC_WIDTH_PROPERTY, oldValue, newValue);
     }
 
-    /**
-     * Sets the arc height.
-     */
     public void setArcHeight(double newValue) {
         double oldValue = roundrect.archeight;
         roundrect.archeight = newValue;
         firePropertyChange(ARC_HEIGHT_PROPERTY, oldValue, newValue);
     }
 
-    /**
-     * Convenience method for setting both the arc width and the arc height.
-     */
     public void setArc(double width, double height) {
         setArcWidth(width);
         setArcHeight(height);
     }
 
-    /**
-     * Checks if a Point2D.Double is inside the figure.
-     */
+
+
     @Override
     public boolean contains(Point2D.Double p) {
-        RoundRectangle2D.Double r = (RoundRectangle2D.Double) roundrect.clone();
         double grow = AttributeKeys.getPerpendicularHitGrowth(this, 1.0);
-        r.x -= grow;
-        r.y -= grow;
-        r.width += grow * 2;
-        r.height += grow * 2;
-        r.arcwidth += grow * 2;
-        r.archeight += grow * 2;
+        RoundRectangle2D.Double r = getGrownRoundRect(grow);
         return r.contains(p);
     }
+
+    // this part is for changing what the figure is bound to
 
     @Override
     public void setBounds(Point2D.Double anchor, Point2D.Double lead) {
@@ -170,21 +166,19 @@ public class RoundRectangleFigure extends AbstractAttributedFigure {
         roundrect.height = Math.max(0.1, Math.abs(lead.y - anchor.y));
     }
 
-    /**
-     * Transforms the figure.
-     *
-     * @param tx The transformation.
-     */
     @Override
     public void transform(AffineTransform tx) {
         Point2D.Double anchor = getStartPoint();
         Point2D.Double lead = getEndPoint();
+
         setBounds(
                 (Point2D.Double) tx.transform(anchor, anchor),
-                (Point2D.Double) tx.transform(lead, lead));
+                (Point2D.Double) tx.transform(lead, lead)
+        );
     }
 
-    // EDITING
+//this part is for editing the figure
+
     @Override
     public Collection<Handle> createHandles(int detailLevel) {
         LinkedList<Handle> handles = (LinkedList<Handle>) super.createHandles(detailLevel);
@@ -206,7 +200,8 @@ public class RoundRectangleFigure extends AbstractAttributedFigure {
         return roundrect.clone();
     }
 
-    // CONNECTING
+//this part is for connecting corners
+
     @Override
     public Connector findConnector(Point2D.Double p, ConnectionFigure prototype) {
         return new ChopRoundRectangleConnector(this);
@@ -217,8 +212,8 @@ public class RoundRectangleFigure extends AbstractAttributedFigure {
         return new ChopRoundRectangleConnector(this);
     }
 
-    // COMPOSITE FIGURES
-    // CLONING
+// this part is for cloning
+
     @Override
     public RoundRectangleFigure clone() {
         RoundRectangleFigure that = (RoundRectangleFigure) super.clone();
@@ -226,8 +221,8 @@ public class RoundRectangleFigure extends AbstractAttributedFigure {
         return that;
     }
 
-    // EVENT HANDLING
-    // PERSISTENCE
+// persistance
+
     @Override
     public void read(DOMInput in) throws IOException {
         super.read(in);
