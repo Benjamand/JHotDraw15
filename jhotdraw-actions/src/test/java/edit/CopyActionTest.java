@@ -6,10 +6,7 @@ import org.junit.Test;
 import org.mockito.Mockito;
 import javax.swing.*;
 import java.awt.datatransfer.Clipboard;
-import java.awt.datatransfer.DataFlavor;
 import static org.junit.Assert.*;
-import static org.mockito.ArgumentMatchers.eq;
-import static org.mockito.Mockito.mock;
 import static org.mockito.Mockito.verify;
 
 public class CopyActionTest {
@@ -38,16 +35,15 @@ public class CopyActionTest {
     }
 
     // Verify is a function used to test behaviour of mocks.
-    // eq checks that the arguments passed into the mock are equal to the expected values.
     // Becuase the components transferhandler was set to the mock. I can verify that exportToClipboard was called with the correct parameters.
     @Test
     public void testCopyTextAreaToClipboard() throws Exception {
         component.selectAll();
         copyAction.actionPerformed(null);
         verify(component.getTransferHandler()).exportToClipboard(
-                eq(component),
-                eq(mockClipboard),
-                eq(TransferHandler.COPY)
+                component,
+                mockClipboard,
+                TransferHandler.COPY
         );
     }
 
@@ -57,9 +53,9 @@ public class CopyActionTest {
         component.selectAll();
         copyAction.actionPerformed(null);
         verify(component.getTransferHandler()).exportToClipboard(
-                eq(component),
-                eq(mockClipboard),
-                eq(TransferHandler.COPY)
+                component,
+                mockClipboard,
+                TransferHandler.COPY
         );
     }
     @Test
@@ -73,9 +69,9 @@ public class CopyActionTest {
         component.selectAll();
         copyAction.actionPerformed(null);
         verify(component.getTransferHandler()).exportToClipboard(
-                eq(component),
-                eq(mockClipboard),
-                eq(TransferHandler.COPY)
+                component,
+                mockClipboard,
+                TransferHandler.COPY
         );
     }
     @Test
@@ -84,9 +80,9 @@ public class CopyActionTest {
         component.selectAll();
         copyAction.actionPerformed(null);
         verify(component.getTransferHandler()).exportToClipboard(
-                eq(component),
-                eq(mockClipboard),
-                eq(TransferHandler.COPY)
+                component,
+                mockClipboard,
+                TransferHandler.COPY
         );
     }
 
