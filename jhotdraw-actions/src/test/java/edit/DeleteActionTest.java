@@ -23,7 +23,7 @@ public class DeleteActionTest {
 
     /**
      * JTextComponent c = getTextComponent(e);
-     * Inside deleteNextChar & actionPerformed methods above is how the JTextComponent is retrieved.
+     * Inside deleteNextChar, otherwise it takes the selected component
      * The test creates an ActionEvent with the component as the source, for the deleteNextChar method to work correctly
      */
 

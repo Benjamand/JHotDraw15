@@ -1,0 +1,90 @@
+{
+  "className": "edit.bddtests.PasteActionBDDTest",
+  "name": "Paste Action BDD",
+  "scenarios": [
+    {
+      "className": "edit.bddtests.PasteActionBDDTest",
+      "testMethodName": "should_past_clipboard_content_into_text_field",
+      "description": "should past clipboard content into text field",
+      "tagIds": [],
+      "explicitParameters": [],
+      "derivedParameters": [],
+      "scenarioCases": [
+        {
+          "caseNr": 1,
+          "steps": [
+            {
+              "name": "a text area with clipboard content",
+              "words": [
+                {
+                  "value": "Given",
+                  "isIntroWord": true
+                },
+                {
+                  "value": "a text area with clipboard content"
+                },
+                {
+                  "value": "Test!",
+                  "argumentInfo": {
+                    "argumentName": "text",
+                    "formattedValue": "Test!"
+                  }
+                }
+              ],
+              "status": "PASSED",
+              "durationInNanos": 20859200,
+              "depth": 0,
+              "parentFailed": false
+            },
+            {
+              "name": "the paste action is performed",
+              "words": [
+                {
+                  "value": "When",
+                  "isIntroWord": true
+                },
+                {
+                  "value": "the paste action is performed"
+                }
+              ],
+              "status": "PASSED",
+              "durationInNanos": 62675000,
+              "depth": 0,
+              "parentFailed": false
+            },
+            {
+              "name": "the text area should contain",
+              "words": [
+                {
+                  "value": "Then",
+                  "isIntroWord": true
+                },
+                {
+                  "value": "the text area should contain"
+                },
+                {
+                  "value": "Test!",
+                  "argumentInfo": {
+                    "argumentName": "expectedText",
+                    "formattedValue": "Test!"
+                  }
+                }
+              ],
+              "status": "PASSED",
+              "durationInNanos": 683500,
+              "depth": 0,
+              "parentFailed": false
+            }
+          ],
+          "explicitArguments": [],
+          "derivedArguments": [],
+          "status": "SUCCESS",
+          "durationInNanos": 113110900
+        }
+      ],
+      "casesAsTable": false,
+      "durationInNanos": 113110900
+    }
+  ],
+  "tagMap": {}
+}

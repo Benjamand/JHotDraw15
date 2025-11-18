@@ -6,6 +6,8 @@ import org.junit.Test;
 import org.mockito.Mockito;
 import javax.swing.*;
 import java.awt.datatransfer.Clipboard;
+import java.awt.datatransfer.DataFlavor;
+
 import static org.junit.Assert.*;
 import static org.mockito.Mockito.verify;
 
