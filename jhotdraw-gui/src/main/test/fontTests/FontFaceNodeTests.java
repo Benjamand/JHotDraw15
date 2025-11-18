@@ -16,8 +16,6 @@ public class FontFaceNodeTests {
 
      @Mock
      private ActionListener listener;
-     private Font font1;
-     private Font font2;
 
      @BeforeEach
      void setUp() {
@@ -35,8 +33,16 @@ public class FontFaceNodeTests {
      // Test boundary case scenario for FontFaceNode
      @Test
      public void beautifyNameTestBoundaryCase() {
-          Font testFont = new Font("k213k02991021903901kmdsakd02139smklææææ...l,æææ", Font.PLAIN, 12);
+          Font testFont = new Font("", Font.PLAIN, 12);
           FontFaceNode faceNode = new FontFaceNode(testFont);
           assertEquals("Dialog.plain", faceNode.toString());
+     }
+
+     // Invariant test for fontfacenode. Must always be a leaf.
+     @Test
+     public void isLeafTest() {
+          FontFaceNode node = new FontFaceNode(new Font("Arial", 0, 12));
+          assertTrue(node.isLeaf());
+          assertEquals(0, node.getChildCount());
      }
 }

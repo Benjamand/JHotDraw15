@@ -12,6 +12,7 @@ import org.mockito.MockitoAnnotations;
 import javax.swing.*;
 import java.awt.*;
 import java.awt.event.ActionListener;
+import java.util.concurrent.atomic.AtomicReference;
 
 import static org.junit.Assert.*;
 
@@ -19,8 +20,8 @@ public class JFontChooserTests {
 
      @Mock
      private ActionListener listener;
-     private Font font1;
-     private Font font2;
+     private Font font1 = new Font("Arial", Font.PLAIN, 12);
+     private Font font2 = new Font("Times New Roman", Font.BOLD, 14);
 
      @BeforeEach
      void setUp() {
@@ -56,15 +57,28 @@ public class JFontChooserTests {
      public void chooseFakeFont() {
           JFontChooser fontChooser = new JFontChooser();
 
-          Font font3 = new Font("BOGUSA AND FAKE FONT, NOT REAL 1293129391239###!!!!", Font.ITALIC, 999999999);
+          Font font3 = new Font("BOGUSA AND FAKE FONT, NOT REAL 1293129391239###!!!!", Font.BOLD, 999999999);
 
           fontChooser.setSelectedFont(font1);
           assertEquals(font1, fontChooser.getSelectedFont());
 
           fontChooser.setSelectedFont(font3);
-          assertEquals(font1, fontChooser.getSelectedFont());
+          assertEquals(font3, fontChooser.getSelectedFont());
 
      }
 
+
+     // Test the invariant: approveSelection should always fire the correct command.
+     @Test
+     public void approveSelectionTest() {
+          JFontChooser chooser = new JFontChooser();
+          AtomicReference<String> command = new AtomicReference<>();
+
+          chooser.addActionListener(e -> command.set(e.getActionCommand()));
+
+          chooser.approveSelection();
+
+          assertEquals(JFontChooser.APPROVE_SELECTION, command.get());
+     }
 
 }
