@@ -26,17 +26,21 @@ public class DefaultFontChooserModelTests {
 
      @Test
      // Invariant test
-     // Regardless of which fonts are set, the models root node has exactly 10 children.
+     // Regardless of which fonts are set, the models root node has the amount of children as there are groups in the yaml.
      public void setFontsTest() {
           DefaultFontChooserModel model = new DefaultFontChooserModel();
+          int expected = 1 + model.getConfig().getGroups().size() + 1;
+
           model.setFonts(new Font[] { new Font("Arial", Font.PLAIN, 12) });
-          Assertions.assertEquals(10, model.getChildCount(model.getRoot()));
+          Assertions.assertEquals(expected, model.getChildCount(model.getRoot()));
 
           model.setFonts(GraphicsEnvironment.getLocalGraphicsEnvironment().getAllFonts());
-          assertEquals(10, model.getChildCount(model.getRoot()));
+          assertEquals(expected, model.getChildCount(model.getRoot()));
 
           model.setFonts(new Font[] { new Font("Times New Roman", Font.BOLD, 14) });
-          assertEquals(10, model.getChildCount(model.getRoot()));
+          assertEquals(expected, model.getChildCount(model.getRoot()));
+
+
      }
 
 
