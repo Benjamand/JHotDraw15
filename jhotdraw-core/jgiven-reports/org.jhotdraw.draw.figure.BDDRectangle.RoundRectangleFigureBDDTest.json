@@ -1,0 +1,215 @@
+{
+  "className": "org.jhotdraw.draw.figure.BDDRectangle.RoundRectangleFigureBDDTest",
+  "name": "Round Rectangle Figure BDD",
+  "scenarios": [
+    {
+      "className": "org.jhotdraw.draw.figure.BDDRectangle.RoundRectangleFigureBDDTest",
+      "testMethodName": "roundRectangle_resizes_when_bounds_are_set",
+      "description": "roundRectangle resizes when bounds are set",
+      "tagIds": [],
+      "explicitParameters": [],
+      "derivedParameters": [],
+      "scenarioCases": [
+        {
+          "caseNr": 1,
+          "steps": [
+            {
+              "name": "a round rectangle",
+              "words": [
+                {
+                  "value": "Given",
+                  "isIntroWord": true
+                },
+                {
+                  "value": "a round rectangle"
+                }
+              ],
+              "status": "PASSED",
+              "durationInNanos": 15482200,
+              "depth": 0,
+              "parentFailed": false
+            },
+            {
+              "name": "bounds are set",
+              "words": [
+                {
+                  "value": "When",
+                  "isIntroWord": true
+                },
+                {
+                  "value": "bounds are set"
+                },
+                {
+                  "value": "0.0",
+                  "argumentInfo": {
+                    "argumentName": "x1",
+                    "formattedValue": "0.0"
+                  }
+                },
+                {
+                  "value": "0.0",
+                  "argumentInfo": {
+                    "argumentName": "y1",
+                    "formattedValue": "0.0"
+                  }
+                },
+                {
+                  "value": "120.0",
+                  "argumentInfo": {
+                    "argumentName": "x2",
+                    "formattedValue": "120.0"
+                  }
+                },
+                {
+                  "value": "60.0",
+                  "argumentInfo": {
+                    "argumentName": "y2",
+                    "formattedValue": "60.0"
+                  }
+                }
+              ],
+              "status": "PASSED",
+              "durationInNanos": 12434500,
+              "depth": 0,
+              "parentFailed": false
+            },
+            {
+              "name": "round rectangle should have size",
+              "words": [
+                {
+                  "value": "Then",
+                  "isIntroWord": true
+                },
+                {
+                  "value": "round rectangle should have size"
+                },
+                {
+                  "value": "120.0",
+                  "argumentInfo": {
+                    "argumentName": "width",
+                    "formattedValue": "120.0"
+                  }
+                },
+                {
+                  "value": "60.0",
+                  "argumentInfo": {
+                    "argumentName": "height",
+                    "formattedValue": "60.0"
+                  }
+                }
+              ],
+              "status": "PASSED",
+              "durationInNanos": 158418700,
+              "depth": 0,
+              "parentFailed": false
+            }
+          ],
+          "explicitArguments": [],
+          "derivedArguments": [],
+          "status": "SUCCESS",
+          "durationInNanos": 240078000
+        }
+      ],
+      "casesAsTable": false,
+      "durationInNanos": 240078000
+    },
+    {
+      "className": "org.jhotdraw.draw.figure.BDDRectangle.RoundRectangleFigureBDDTest",
+      "testMethodName": "roundRectangle_arc_can_be_set",
+      "description": "roundRectangle arc can be set",
+      "tagIds": [],
+      "explicitParameters": [],
+      "derivedParameters": [],
+      "scenarioCases": [
+        {
+          "caseNr": 1,
+          "steps": [
+            {
+              "name": "a round rectangle",
+              "words": [
+                {
+                  "value": "Given",
+                  "isIntroWord": true
+                },
+                {
+                  "value": "a round rectangle"
+                }
+              ],
+              "status": "PASSED",
+              "durationInNanos": 328900,
+              "depth": 0,
+              "parentFailed": false
+            },
+            {
+              "name": "arc is set",
+              "words": [
+                {
+                  "value": "When",
+                  "isIntroWord": true
+                },
+                {
+                  "value": "arc is set"
+                },
+                {
+                  "value": "15.0",
+                  "argumentInfo": {
+                    "argumentName": "width",
+                    "formattedValue": "15.0"
+                  }
+                },
+                {
+                  "value": "25.0",
+                  "argumentInfo": {
+                    "argumentName": "height",
+                    "formattedValue": "25.0"
+                  }
+                }
+              ],
+              "status": "PASSED",
+              "durationInNanos": 2922000,
+              "depth": 0,
+              "parentFailed": false
+            },
+            {
+              "name": "round rectangle should have arc",
+              "words": [
+                {
+                  "value": "Then",
+                  "isIntroWord": true
+                },
+                {
+                  "value": "round rectangle should have arc"
+                },
+                {
+                  "value": "15.0",
+                  "argumentInfo": {
+                    "argumentName": "arcWidth",
+                    "formattedValue": "15.0"
+                  }
+                },
+                {
+                  "value": "25.0",
+                  "argumentInfo": {
+                    "argumentName": "arcHeight",
+                    "formattedValue": "25.0"
+                  }
+                }
+              ],
+              "status": "PASSED",
+              "durationInNanos": 1595900,
+              "depth": 0,
+              "parentFailed": false
+            }
+          ],
+          "explicitArguments": [],
+          "derivedArguments": [],
+          "status": "SUCCESS",
+          "durationInNanos": 8337700
+        }
+      ],
+      "casesAsTable": false,
+      "durationInNanos": 8337700
+    }
+  ],
+  "tagMap": {}
+}
