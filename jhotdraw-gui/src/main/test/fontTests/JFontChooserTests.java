@@ -2,6 +2,8 @@ package fontTests;
 
 
 import org.jhotdraw.gui.JFontChooser;
+import org.jhotdraw.gui.fontchooser.DefaultFontChooserModel;
+import org.jhotdraw.gui.fontchooser.FontFaceNode;
 import org.junit.jupiter.api.BeforeAll;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
@@ -10,6 +12,7 @@ import org.mockito.Mock;
 import org.mockito.MockitoAnnotations;
 
 import javax.swing.*;
+import javax.swing.tree.TreePath;
 import java.awt.*;
 import java.awt.event.ActionListener;
 import java.util.concurrent.atomic.AtomicReference;
@@ -79,6 +82,29 @@ public class JFontChooserTests {
           chooser.approveSelection();
 
           assertEquals(JFontChooser.APPROVE_SELECTION, command.get());
+     }
+
+     @Test
+     void updateSelectionPath_setsCorrectTreePath_whenFontExists() {
+          // Arrange
+          JFontChooser chooser = new JFontChooser();
+
+          Font font = new Font("Arial", Font.PLAIN, 12);
+          Font[] fonts = new Font[] { font };
+
+          DefaultFontChooserModel model = new DefaultFontChooserModel(fonts);
+          chooser.setModel(model);
+
+          chooser.setSelectedFont(font);
+
+          TreePath selectionPath = chooser.getSelectionPath();
+          assertNotNull(selectionPath);
+
+          Object lastComponent = selectionPath.getLastPathComponent();
+          assertTrue(lastComponent instanceof FontFaceNode);
+
+          FontFaceNode faceNode = (FontFaceNode) lastComponent;
+          assertEquals(font.getFontName(), faceNode.getFont().getFontName());
      }
 
 }
